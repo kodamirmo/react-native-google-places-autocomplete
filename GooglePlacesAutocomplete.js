@@ -8,7 +8,7 @@ import React, {
   useEffect,
   useImperativeHandle,
   useRef,
-  useState,
+  useState
 } from 'react';
 import {
   ActivityIndicator,
@@ -136,12 +136,20 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
 
   const [stateText, setStateText] = useState('');
   const [dataSource, setDataSource] = useState(buildRowsFromResults([]));
+  const [extraSources, setExtraSources] = useState(props.extraSources?props.extraSources:[]);
+
   const [listViewDisplayed, setListViewDisplayed] = useState(
     props.listViewDisplayed === 'auto' ? false : props.listViewDisplayed,
   );
   const [url] = useState(getRequestUrl(props.requestUrl));
 
   const inputRef = useRef();
+
+  useEffect(() => {
+    if (props.extraSources) {
+      setExtraSources(props.extraSources);
+    }
+  }, props.extraSources);
 
   useEffect(() => {
     // This will load the default value's search results after the view has
@@ -768,7 +776,7 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
             props.suppressDefaultStyles ? {} : defaultStyles.listView,
             props.styles.listView,
           ]}
-          data={dataSource}
+          data={[...extraSources, ...dataSource]}
           keyExtractor={keyGenerator}
           extraData={[dataSource, props]}
           ItemSeparatorComponent={_renderSeparator}
@@ -903,6 +911,7 @@ GooglePlacesAutocomplete.propTypes = {
   textInputHide: PropTypes.bool,
   textInputProps: PropTypes.object,
   timeout: PropTypes.number,
+  extraSources: PropTypes.array,
 };
 
 GooglePlacesAutocomplete.defaultProps = {
@@ -946,6 +955,7 @@ GooglePlacesAutocomplete.defaultProps = {
   textInputHide: false,
   textInputProps: {},
   timeout: 20000,
+  extraSources: [],
 };
 
 export default { GooglePlacesAutocomplete };
