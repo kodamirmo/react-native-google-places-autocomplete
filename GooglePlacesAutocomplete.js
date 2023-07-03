@@ -149,7 +149,7 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
     if (props.extraSources) {
       setExtraSources(props.extraSources);
     }
-  }, props.extraSources);
+  }, [props.extraSources]);
 
   useEffect(() => {
     // This will load the default value's search results after the view has
@@ -788,7 +788,10 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
             props.renderHeaderComponent &&
             props.renderHeaderComponent(stateText)
           }
-          ListFooterComponent={_renderPoweredLogo}
+          ListFooterComponent={
+            props.renderFooterComponent ||
+            _renderPoweredLogo
+          }
           {...props}
         />
       );
@@ -898,6 +901,7 @@ GooglePlacesAutocomplete.propTypes = {
   query: PropTypes.object,
   renderDescription: PropTypes.func,
   renderHeaderComponent: PropTypes.func,
+  renderFooterComponent: PropTypes.func,
   renderLeftButton: PropTypes.func,
   renderRightButton: PropTypes.func,
   renderRow: PropTypes.func,
