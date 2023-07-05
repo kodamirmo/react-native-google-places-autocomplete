@@ -246,6 +246,10 @@ export const GooglePlacesAutocomplete = forwardRef((props, ref) => {
   };
 
   const _onPress = (rowData) => {
+    if (rowData.isFav) {
+      return props.onPress(rowData, rowData);
+    }
+
     if (rowData.isPredefinedPlace !== true && props.fetchDetails === true) {
       if (rowData.isLoading === true) {
         // already requesting
